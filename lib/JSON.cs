@@ -39,6 +39,10 @@ public class JSON
 		return JsonDecode(System.Text.ASCIIEncoding.ASCII.GetString(json));
 	}
 	
+    public static object Parse(byte[] json) {
+        return JsonDecode(json);
+    }
+    
 	/// <summary>
 	/// Parses the string json into a value
 	/// </summary>
@@ -50,6 +54,11 @@ public class JSON
 		
 		return JsonDecode (json, ref success);
 	}
+    
+    public static object Parse (string json)
+    {
+        return JsonDecode(json);
+    }
 
 	/// <summary>
 	/// Parses the string json into a value; and fills 'success' with the successfullness of the parse.
@@ -69,6 +78,11 @@ public class JSON
 			return null;
 		}
 	}
+    
+    public static object Parse (string json, ref bool success)
+    {
+        return JsonDecode(json, ref success);
+    }
 
 	/// <summary>
 	/// Converts a Hashtable / ArrayList object into a JSON string
@@ -81,6 +95,11 @@ public class JSON
 		bool success = SerializeValue (json, builder);
 		return (success ? builder.ToString () : null);
 	}
+    
+    public static string Stringify (object json)
+    {
+        return JsonEncode(json);
+    }
 
 	protected static Hashtable ParseObject (char[] json, ref int index, ref bool success)
 	{
