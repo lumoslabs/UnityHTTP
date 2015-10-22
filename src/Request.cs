@@ -208,6 +208,10 @@ namespace HTTP
                     case 307:
                     case 302:
                     case 301:
+                        if (response.GetHeader ("Location").Equals(string.Empty))
+                        {
+                            throw new Exception("HTTP.Request: Got a redirect status (" + response.status + ") but didn't have a Location header. Maybe the server returned null.");
+                        }
                         uri = new Uri (response.GetHeader ("Location"));
                         continue;
                     default:
