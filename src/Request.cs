@@ -345,11 +345,12 @@ namespace HTTP
 
         public static bool ValidateServerCertificate (object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
         {
-#if !UNITY_EDITOR
-            System.Console.WriteLine( "NET: SSL Cert: " + sslPolicyErrors.ToString() );
-#else
-            Debug.LogWarning("SSL Cert Error: " + sslPolicyErrors.ToString ());
-#endif
+            //TODO - do something about middleman attacks
+// #if !UNITY_EDITOR
+//             System.Console.WriteLine( "NET: SSL Cert: " + sslPolicyErrors.ToString() );
+// #else
+//             Debug.LogWarning("SSL Cert Error: " + sslPolicyErrors.ToString ());
+// #endif
             return true;
         }
 
