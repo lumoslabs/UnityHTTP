@@ -30,7 +30,8 @@ namespace HTTP
         public static bool LogAllRequests = false;
         public static bool VerboseLogging = false;
         public static string unityVersion = Application.unityVersion;
-        public static string operatingSystem = SystemInfo.operatingSystem; 
+        public static string operatingSystem = SystemInfo.operatingSystem;
+        public static int readTimeout = 6000;
 
         public CookieJar cookieJar = CookieJar.Instance;
         public string method = "GET";
@@ -178,6 +179,7 @@ namespace HTTP
                     client.Connect (uri.Host, uri.Port);
                     using (var stream = client.GetStream ()) {
                         var ostream = stream as Stream;
+                        ostream.ReadTimeout = readTimeout;
                         if (uri.Scheme.ToLower() == "https") {
                             ostream = new SslStream (stream, false, new RemoteCertificateValidationCallback (ValidateServerCertificate));
                             try {
@@ -195,7 +197,7 @@ namespace HTTP
                         response.ReadFromStream( ostream );
                     }
                     client.Close ();
-
+                    
                     switch (response.status) {
                     case 307:
                     case 302:
@@ -368,6 +370,14 @@ namespace HTTP
                 int readed = byteStream.Read(buffer, 0, bufferSize);
                 stream.Write(buffer, 0, readed);
                 numBytesToRead -= readed;
+                
+                //if 0 is returned, then the end of the stream has been reached
+                //https://msdn.microsoft.com/en-us/library/system.io.memorystream.read(v=vs.110).aspx
+                //otherwise this can result in an infinite loop
+                if ( readed <= 0 )
+                {
+                    break;
+                }
             }
         }
 
