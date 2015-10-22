@@ -32,6 +32,7 @@ namespace HTTP
         public static string unityVersion = Application.unityVersion;
         public static string operatingSystem = SystemInfo.operatingSystem;
         public static int readTimeout = 6000;
+        public static bool verboseStatusLogging = false;
 
         public CookieJar cookieJar = CookieJar.Instance;
         public string method = "GET";
@@ -197,6 +198,11 @@ namespace HTTP
                         response.ReadFromStream( ostream );
                     }
                     client.Close ();
+
+                    if ( verboseStatusLogging )
+                    {
+                        Debug.Log( "Response status: " + response.status );
+                    }
                     
                     switch (response.status) {
                     case 307:
